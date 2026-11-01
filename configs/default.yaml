@@ -1,0 +1,18 @@
+# Did Section 232 steel tariffs pay steel shareholders? Event study on US and foreign steel stocks
+market: SPY
+us_steel: {NUE: "Nucor (EAF)", STLD: "Steel Dynamics (EAF)", CMC: "Commercial Metals (EAF, rebar)", CLF: "Cleveland-Cliffs (integrated)", RS: "Reliance (service centres)"}
+foreign_steel: {MT: "ArcelorMittal", TX: "Ternium", GGB: "Gerdau", SID: "CSN", PKX: "POSCO"}
+metals_proxy: DBB   # base-metals futures fund (copper, aluminium, zinc), control for metal prices
+# Day 0 = first trading session in which the news could be priced. Sources in the README.
+events:
+  - {id: 2018_announce, day0: "2018-03-01", label: "25% steel tariff announced at the White House (1 Mar 2018)"}
+  - {id: 2018_signed,   day0: "2018-03-08", label: "Proclamation 9705 signed, Canada and Mexico exempted (8 Mar 2018)"}
+  - {id: 2025_restored, day0: "2025-02-10", label: "25% restored for all countries, exemptions ended (announced 9 Feb, signed 10 Feb 2025)"}
+  - {id: 2025_doubled,  day0: "2025-06-02", label: "Doubling to 50% announced Fri 30 May 2025 after the close; effective 4 Jun"}
+estimation: [-260, -21]     # market-model estimation window, trading days relative to day 0
+windows: {"0,1": [0, 1], "-1,3": [-1, 3], "2,20": [2, 20], "0,10": [0, 10]}
+long_horizons: [63, 126, 250]
+sources:
+  daily_treasury_yield.parquet: {url: https://huggingface.co/datasets/defeatbeta/yahoo-finance-data/resolve/main/data/US/daily_treasury_yield.parquet, sha256: d01fa8d1b818ad3ba61fe459dcbf317af981b926f513054ba0104328fdce31e0}
+  stock_dividend_events.parquet: {url: https://huggingface.co/datasets/defeatbeta/yahoo-finance-data/resolve/main/data/US/stock_dividend_events.parquet, sha256: 9eb8265ac9d21997a8d9a31f7ee8e5099c42ca2508fe36a07929595b378d4b54}
+  stock_prices.parquet: {url: https://huggingface.co/datasets/defeatbeta/yahoo-finance-data/resolve/main/data/US/stock_prices.parquet, sha256: 4c522ec0dee02cb6554b5c3e4929d512327715c8f89670f9b1898b2403912f98}
